@@ -1,0 +1,23 @@
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+
+      - name: Create a new EC2 key
+        ec2_key:
+            name: nixcraft-key
+            region: eu-central-1
+        register: keyout
+
+
+      - debug:
+          var: keyout
+
+
+
+      - name: store login key
+        copy:
+          content: "{{keyout.key.private_key}}"
+          dest: ./nixcraft-key.pem
+        when: keyout.changed
+~
